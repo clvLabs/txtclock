@@ -9,14 +9,16 @@ class Config:
     filename = f"{appname}.conf"
 
     _defaults = {
-        "twenty_four_h":    { "value": True,            "help": "use 24h mode?",         "shorthand": "24" },
-        "show_date":        { "value": False,           "help": "show date?",            "shorthand": "d" },
-        "show_seconds_bar": { "value": False,           "help": "show seconds bar?",     "shorthand": "b" },
-        "font":             { "value": "default",       "help": "font style" },
-        "time_format":      { "value": "%H:%M:%S",      "help": "time format" },
-        "date_format":      { "value": "%Y/%m/%d",      "help": "date format" },
-        "numbers_color":    { "value": "38;5;10",       "help": "color for numbers" },
-        "separators_color": { "value": "38;5;240",      "help": "color for separators" },
+        "utc":                   { "value": False,           "help": "use UTC instead of local time?" },
+        "face":                  { "value": "default",       "help": "select clock face",     "shorthand": "f" },
+        "show_date":             { "value": False,           "help": "show date?",            "shorthand": "d" },
+        "show_seconds_bar":      { "value": False,           "help": "show seconds bar?",     "shorthand": "b" },
+        "seconds_bar_size":      { "value": 60,              "help": "seconds bar size" },
+        "second_bar_fill_char":  { "value": "░",             "help": "fill char for seconds bar"},
+        "second_bar_empty_char": { "value": "·",             "help": "fill char for seconds bar"},
+        "show_help":             { "value": False,           "help": "show help bar?"},
+        "time_format":           { "value": "%H:%M:%S",      "help": "time format" },
+        "date_format":           { "value": "%Y/%m/%d",      "help": "date format" },
     }
 
     _locations = [
@@ -48,7 +50,16 @@ class Config:
             for prop in Config._defaults:
                 if getattr(args, prop, None) is None:
                     if prop in parser[Config.appname]:
-                        setattr(self, prop, parser[Config.appname][prop])
+                        default_val = Config._defaults[prop]['value']
+
+                        if type(default_val) is bool:
+                            setattr(self, prop, parser.getboolean(Config.appname, prop))
+                        elif type(default_val) is int:
+                            setattr(self, prop, parser.getint(Config.appname, prop))
+                        elif type(default_val) is float:
+                            setattr(self, prop, parser.getfloat(Config.appname, prop))
+                        else:
+                            setattr(self, prop, parser[Config.appname][prop])
 
 
     def __str__(self) -> str:
@@ -76,6 +87,11 @@ class Config:
         parser.add_section(Config.appname)
         for prop in Config._defaults:
             value = str(getattr(self, prop))
+
+            # Fix for % chars  :)
+            if '%' in value:
+                value = value.replace('%', '%%')
+
             parser.set(Config.appname, prop, value)
 
         _fullpath = f"{path}/{Config.filename}"
