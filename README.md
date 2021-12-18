@@ -57,10 +57,10 @@ Use the following keys while running:
 [txtclock]
 utc = False
 font = numnum
-show_date = True
-show_seconds_bar = True
-seconds_bar_size = 60
-second_bar_fill_char = ░
+show_date = False
+show_seconds_bar = False
+seconds_bar_size = 120
+second_bar_fill_char = ¤
 second_bar_empty_char = ·
 show_help = False
 time_format = %%H:%%M:%%S
