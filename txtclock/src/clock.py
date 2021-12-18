@@ -7,7 +7,7 @@ from src.face import Face
 
 class Clock:
 
-    HELP_STR = "[H]elp [B]ar [C]olor [D]ate [F]ont [Q]uit"
+    HELP_STR = "[h]elp [b]ar [cC]olor [d]ate [fF]ont [q]uit"
 
     def __init__(self, config):
         self.config = config
@@ -92,8 +92,13 @@ class Clock:
             self.config.show_seconds_bar = not self.config.show_seconds_bar
             self._redraw(force_clear=True)
 
-        if ch in 'Cc':
+        if ch in 'c':
             self.config.numbers_color = self.config.get_next_color(self.config.numbers_color)
+            self.config.create_colors()
+            self._redraw(force_clear=True)
+
+        if ch in 'C':
+            self.config.numbers_color = self.config.get_prev_color(self.config.numbers_color)
             self.config.create_colors()
             self._redraw(force_clear=True)
 
@@ -101,8 +106,12 @@ class Clock:
             self.config.show_date = not self.config.show_date
             self._redraw(force_clear=True)
 
-        if ch in 'Ff':
+        if ch in 'f':
             self.config.font = self.config.get_next_font(self.config.font)
+            self._redraw(force_clear=True)
+
+        if ch in 'F':
+            self.config.font = self.config.get_prev_font(self.config.font)
             self._redraw(force_clear=True)
 
         if ch in 'Hh':

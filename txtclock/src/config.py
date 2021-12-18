@@ -33,8 +33,8 @@ class Config:
     ]
 
     colors = {
-        "black": curses.COLOR_BLACK,
         "blue": curses.COLOR_BLUE,
+        "black": curses.COLOR_BLACK,
         "cyan": curses.COLOR_CYAN,
         "green": curses.COLOR_GREEN,
         "magenta": curses.COLOR_MAGENTA,
@@ -98,12 +98,27 @@ class Config:
 
     def get_next_color(self, color):
         color_keys = list(Config.colors.keys())
-        current_index = color_keys.index(color)
-        current_index += 1
+        if color in color_keys:
+            current_index = color_keys.index(color) + 1
+        else:
+            current_index = 0
         if current_index >= len(color_keys):
             current_index = 0
         if color_keys[current_index] == 'black':    # Skip black
             current_index += 1
+        return color_keys[current_index]
+
+
+    def get_prev_color(self, color):
+        color_keys = list(Config.colors.keys())
+        if color in color_keys:
+            current_index = color_keys.index(color) - 1
+        else:
+            current_index = 0
+        if current_index < 0:
+            current_index = len(color_keys)-1
+        if color_keys[current_index] == 'black':    # Skip black
+            current_index -= 1
         return color_keys[current_index]
 
 
@@ -113,6 +128,15 @@ class Config:
         current_index += 1
         if current_index >= len(font_keys):
             current_index = 0
+        return font_keys[current_index]
+
+
+    def get_prev_font(self, font):
+        font_keys = list(Config.fonts.keys())
+        current_index = font_keys.index(font)
+        current_index -= 1
+        if current_index < 0:
+            current_index = len(font_keys)-1
         return font_keys[current_index]
 
 
