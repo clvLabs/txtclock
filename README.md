@@ -33,8 +33,9 @@ Use the following keys while running:
 |---|---|
 |`ESC` / `CTRL+C` / `Q`|exit|
 |`B`|Show/hide the seconds bar|
-|`C`|Change numbers color|
+|`C`|Cycle through colors|
 |`D`|Show/hide the date|
+|`F`|Cycle through fonts|
 |`H`|Show/hide the help bar|
 
 ## Configuration
@@ -55,7 +56,7 @@ Use the following keys while running:
 ```ini
 [txtclock]
 utc = False
-face = numnum
+font = numnum
 show_date = True
 show_seconds_bar = True
 seconds_bar_size = 60
@@ -69,7 +70,7 @@ numbers_color = green
 |variable|description|
 |---|---|
 |`utc`|Use UTC time?|
-|`face`|Clock face name|
+|`font`|Clock font name|
 |`show_date`|Show date?|
 |`show_seconds_bar`|Show seconds bar?|
 |`seconds_bar_size`|Seconds bar size (characters)|
@@ -84,9 +85,9 @@ numbers_color = green
 All configuration variables are accesible as parameters:
 ```
 $ txtclock -h
-usage: txtclock [-h] [--write_config WRITE_CONFIG] [--config_file CONFIG_FILE] [--utc UTC] [-f FACE] [-d SHOW_DATE] [-b SHOW_SECONDS_BAR]
+usage: txtclock [-h] [--write_config WRITE_CONFIG] [--config_file CONFIG_FILE] [--utc UTC] [-f FONT] [-d SHOW_DATE] [-b SHOW_SECONDS_BAR]
                 [--seconds_bar_size SECONDS_BAR_SIZE] [--second_bar_fill_char SECOND_BAR_FILL_CHAR] [--second_bar_empty_char SECOND_BAR_EMPTY_CHAR] [--show_help SHOW_HELP]
-                [--time_format TIME_FORMAT] [--date_format DATE_FORMAT]
+                [--time_format TIME_FORMAT] [--date_format DATE_FORMAT] [--numbers_color NUMBERS_COLOR]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -95,7 +96,7 @@ optional arguments:
   --config_file CONFIG_FILE
                         set config file to use
   --utc UTC             use UTC instead of local time?
-  -f FACE, --face FACE  select clock face
+  -f FONT, --font FONT  select clock font
   -d SHOW_DATE, --show_date SHOW_DATE
                         show date?
   -b SHOW_SECONDS_BAR, --show_seconds_bar SHOW_SECONDS_BAR
@@ -117,7 +118,7 @@ optional arguments:
 ```
 
 
-## Faces
+## Fonts
 
 ### default
 ```

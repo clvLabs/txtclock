@@ -2,6 +2,7 @@ import os
 import sys
 import configparser
 import curses
+import src.fonts
 
 class Config:
 
@@ -11,11 +12,11 @@ class Config:
 
     _defaults = {
         "utc":                   { "value": False,           "help": "use UTC instead of local time?" },
-        "face":                  { "value": "default",       "help": "select clock face",     "shorthand": "f" },
+        "font":                  { "value": "numnum",        "help": "select clock font",     "shorthand": "f" },
         "show_date":             { "value": False,           "help": "show date?",            "shorthand": "d" },
         "show_seconds_bar":      { "value": False,           "help": "show seconds bar?",     "shorthand": "b" },
         "seconds_bar_size":      { "value": 60,              "help": "seconds bar size" },
-        "second_bar_fill_char":  { "value": "░",             "help": "fill char for seconds bar"},
+        "second_bar_fill_char":  { "value": "¤",             "help": "fill char for seconds bar"},
         "second_bar_empty_char": { "value": "·",             "help": "fill char for seconds bar"},
         "show_help":             { "value": False,           "help": "show help bar?"},
         "time_format":           { "value": "%H:%M:%S",      "help": "time format" },
@@ -40,6 +41,20 @@ class Config:
         "red": curses.COLOR_RED,
         "white": curses.COLOR_WHITE,
         "yellow": curses.COLOR_YELLOW,
+    }
+
+    fonts = {
+        "basic": src.fonts.get("basic")(),
+        "numnum": src.fonts.get("numnum")(),
+        "bigblocks1": src.fonts.get("bigblocks")("·"),
+        "bigblocks2": src.fonts.get("bigblocks")("#"),
+        "bigblocks3": src.fonts.get("bigblocks")("*"),
+        "bigblocks4": src.fonts.get("bigblocks")("░"),
+        "bigblocks5": src.fonts.get("bigblocks")("▒"),
+        "bigblocks6": src.fonts.get("bigblocks")("▓"),
+        "bigblocks7": src.fonts.get("bigblocks")("█"),
+        "bigblocks8": src.fonts.get("bigblocks")("▄"),
+        "bigblocks9": src.fonts.get("bigblocks")("º"),
     }
 
 
@@ -88,6 +103,15 @@ class Config:
         if color_keys[current_index] == 'black':    # Skip black
             current_index += 1
         return color_keys[current_index]
+
+
+    def get_next_font(self, font):
+        font_keys = list(Config.fonts.keys())
+        current_index = font_keys.index(font)
+        current_index += 1
+        if current_index >= len(font_keys):
+            current_index = 0
+        return font_keys[current_index]
 
 
     def create_colors(self):

@@ -3,11 +3,11 @@ import time
 import datetime
 import curses
 import curses.ascii
-import src.faces
+from src.face import Face
 
 class Clock:
 
-    HELP_STR = "[H]elp [B]ar [C]olor [D]ate [Q]uit"
+    HELP_STR = "[H]elp [B]ar [C]olor [D]ate [F]ont [Q]uit"
 
     def __init__(self, config):
         self.config = config
@@ -16,11 +16,6 @@ class Clock:
         self.exit = False
 
     def start(self):
-        self.face_class = src.faces.get(self.config.face)
-        if self.face_class is None:
-            print(f"ERROR: Unknown face - {self.config.face}")
-            sys.exit(1)
-
         curses.wrapper(self._start)
 
 
@@ -35,7 +30,7 @@ class Clock:
         self.win = win
         self._init_curses()
         self.config.create_colors()
-        self.face = self.face_class(self.win, self.config)
+        self.face = Face(self.win, self.config)
 
         last_second = None
 
@@ -104,6 +99,10 @@ class Clock:
 
         if ch in 'Dd':
             self.config.show_date = not self.config.show_date
+            self._redraw(force_clear=True)
+
+        if ch in 'Ff':
+            self.config.font = self.config.get_next_font(self.config.font)
             self._redraw(force_clear=True)
 
         if ch in 'Hh':

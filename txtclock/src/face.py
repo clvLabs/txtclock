@@ -2,14 +2,9 @@ import curses
 
 class Face:
 
-    name = "default"
-    description = "Default txtclock face"
-    author = "Tony Aguilar"
-
     def __init__(self, win, config) -> None:
         self.win = win
         self.config = config
-
 
     def draw(self, timestamp):
         try:
@@ -21,15 +16,33 @@ class Face:
     def _draw(self, timestamp):
         strlist = []
         y = 0
+        font = self.config.fonts[self.config.font]
+
+        num_lines = len(font.get('0'))
+        num_cols = 0
         txt = timestamp.strftime(self.config.time_format)
-        strlist.append([y, txt])
-        y += 1
+
+        for char in txt:
+            if font.char_exists(char):
+                num_cols += len(font.get(char)[0])
+
+        for line_idx in range(num_lines):
+            line_str = ""
+            for char in txt:
+                if font.char_exists(char):
+                    digit_line = font.get(char)[line_idx]
+                    line_str += digit_line
+
+            strlist.append([y, line_str])
+            y += 1
+
 
         if self.config.show_date:
             txt = timestamp.strftime(self.config.date_format)
             y += 1
             strlist.append([y, txt])
-            y += 1
+            y += 1  # Force extra separation line
+
 
         if self.config.show_seconds_bar:
             bar_width = self.config.seconds_bar_size
@@ -40,7 +53,6 @@ class Face:
             txt = bar_str
             y += 1
             strlist.append([y, txt])
-            y += 1
 
         if y > curses.LINES:
             y = 0
@@ -60,4 +72,4 @@ class Face:
                 x = (curses.COLS - len(txt)) // 2
 
             if txt:
-                self.win.addstr(start_line+offset, x, txt)
+                self.win.addstr(start_line+offset, x, txt, self.config.numbers_color_curses)
