@@ -15,7 +15,7 @@ class Config:
         "font":                  { "value": "numnum",        "help": "select clock font",     "shorthand": "f" },
         "show_date":             { "value": False,           "help": "show date?",            "shorthand": "d" },
         "show_seconds_bar":      { "value": False,           "help": "show seconds bar?",     "shorthand": "b" },
-        "seconds_bar_size":      { "value": 60,              "help": "seconds bar size" },
+        "seconds_bar_size":      { "value": 120,             "help": "seconds bar size" },
         "second_bar_fill_char":  { "value": "¤",             "help": "fill char for seconds bar"},
         "second_bar_empty_char": { "value": "·",             "help": "fill char for seconds bar"},
         "show_help":             { "value": False,           "help": "show help bar?"},
