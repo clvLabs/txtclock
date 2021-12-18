@@ -46,6 +46,8 @@ class Config:
     fonts = {
         "basic": src.fonts.get("basic")(),
         "numnum": src.fonts.get("numnum")(),
+        "bcd": src.fonts.get("bcd")("·", "■"),
+        "easybcd": src.fonts.get("easybcd")("·", "■"),
         "bigblocks1": src.fonts.get("bigblocks")("·"),
         "bigblocks2": src.fonts.get("bigblocks")("#"),
         "bigblocks3": src.fonts.get("bigblocks")("*"),
