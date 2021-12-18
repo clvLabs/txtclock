@@ -226,8 +226,16 @@ class Face:
             line_str = ""
             for char in txt:
                 if char in Face.digits:
+
                     digit_line = Face.digits[char][line_idx]
+
+                    # if char.isnumeric():
+                    #   line_str += f"\x1b[{self.config.numbers_color}m{digit_line}\x1b[0m"
+                    # else:
+                    #   line_str += f"\x1b[{self.config.separators_color}m{digit_line}\x1b[0m"
+
                     line_str += digit_line
+
 
             strlist.append([y, line_str])
             y += 1
@@ -268,4 +276,4 @@ class Face:
                 x = (curses.COLS - len(txt)) // 2
 
             if txt:
-                self.win.addstr(start_line+offset, x, txt)
+                self.win.addstr(start_line+offset, x, txt, self.config.numbers_color_curses)

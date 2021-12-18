@@ -1,6 +1,7 @@
 import os
 import sys
 import configparser
+import curses
 
 class Config:
 
@@ -19,6 +20,7 @@ class Config:
         "show_help":             { "value": False,           "help": "show help bar?"},
         "time_format":           { "value": "%H:%M:%S",      "help": "time format" },
         "date_format":           { "value": "%Y/%m/%d",      "help": "date format" },
+        "numbers_color":         { "value": "green",         "help": "color for numbers", "is_color": True },
     }
 
     _locations = [
@@ -29,16 +31,31 @@ class Config:
         os.environ.get(f"{appname.upper()}_CONF"),
     ]
 
+    colors = {
+        "black": curses.COLOR_BLACK,
+        "blue": curses.COLOR_BLUE,
+        "cyan": curses.COLOR_CYAN,
+        "green": curses.COLOR_GREEN,
+        "magenta": curses.COLOR_MAGENTA,
+        "red": curses.COLOR_RED,
+        "white": curses.COLOR_WHITE,
+        "yellow": curses.COLOR_YELLOW,
+    }
+
 
     def __init__(self):
+        self._last_color_id = 0
+
         from .args import Args
         args = Args.read()
 
         for name in Config._defaults:
             if getattr(args, name, None) is not None:
-                setattr(self, name, getattr(args, name))
+                value = getattr(args, name)
             else:
-                setattr(self, name, Config._defaults[name]['value'])
+                value = Config._defaults[name]['value']
+
+            setattr(self, name, value)
 
         setattr(self, "args", args)
 
@@ -60,6 +77,35 @@ class Config:
                             setattr(self, prop, parser.getfloat(Config.appname, prop))
                         else:
                             setattr(self, prop, parser[Config.appname][prop])
+
+
+    def get_next_color(self, color):
+        color_keys = list(Config.colors.keys())
+        current_index = color_keys.index(color)
+        current_index += 1
+        if current_index >= len(color_keys):
+            current_index = 0
+        if color_keys[current_index] == 'black':    # Skip black
+            current_index += 1
+        return color_keys[current_index]
+
+
+    def create_colors(self):
+        for prop in Config._defaults:
+            value = getattr(self, prop)
+            is_color = Config._defaults[prop].get("is_color", False)
+            if is_color:
+                setattr(self, f"{prop}_curses", self._create_color(value))
+
+
+    def _create_color(self, colorstr):
+        parts = colorstr.replace(" ","").split(",")
+        fg = parts[0]
+        bg = parts[1] if len(parts)>1 else "black"
+        self._last_color_id += 1
+        curses.init_pair(self._last_color_id, self.colors[fg], self.colors[bg])
+        color_id = self._last_color_id
+        return curses.color_pair(color_id)
 
 
     def __str__(self) -> str:

@@ -7,14 +7,13 @@ import src.faces
 
 class Clock:
 
-    HELP_STR = "[Q]uit [B]ar [D]ate [H]elp"
+    HELP_STR = "[H]elp [B]ar [C]olor [D]ate [Q]uit"
 
     def __init__(self, config):
         self.config = config
         self.timestamp = None
         self.ignore_next_resize = False
         self.exit = False
-
 
     def start(self):
         self.face_class = src.faces.get(self.config.face)
@@ -35,6 +34,7 @@ class Clock:
     def _start(self, win):
         self.win = win
         self._init_curses()
+        self.config.create_colors()
         self.face = self.face_class(self.win, self.config)
 
         last_second = None
@@ -67,7 +67,7 @@ class Clock:
         self.face.draw(self.timestamp)
 
         if self.config.show_help:
-            self.win.addstr(0,0,Clock.HELP_STR)
+            self.win.addstr(0,0,Clock.HELP_STR, curses.A_STANDOUT)
 
 
     def _process_user_input(self):
@@ -95,6 +95,11 @@ class Clock:
 
         if ch in 'Bb':
             self.config.show_seconds_bar = not self.config.show_seconds_bar
+            self._redraw(force_clear=True)
+
+        if ch in 'Cc':
+            self.config.numbers_color = self.config.get_next_color(self.config.numbers_color)
+            self.config.create_colors()
             self._redraw(force_clear=True)
 
         if ch in 'Dd':

@@ -33,6 +33,7 @@ Use the following keys while running:
 |---|---|
 |`ESC` / `CTRL+C` / `Q`|exit|
 |`B`|Show/hide the seconds bar|
+|`C`|Change numbers color|
 |`D`|Show/hide the date|
 |`H`|Show/hide the help bar|
 
@@ -63,6 +64,7 @@ second_bar_empty_char = ·
 show_help = False
 time_format = %%H:%%M:%%S
 date_format = %%Y/%%m/%%d
+numbers_color = green
 ```
 |variable|description|
 |---|---|
@@ -76,6 +78,7 @@ date_format = %%Y/%%m/%%d
 |`show_help`|Show help bar?|
 |`time_format`|Time format|
 |`date_format`|Date format|
+|`numbers_color`|Color for numbers|
 
 ## Parameters
 All configuration variables are accesible as parameters:
@@ -109,6 +112,8 @@ optional arguments:
                         time format
   --date_format DATE_FORMAT
                         date format
+  --numbers_color NUMBERS_COLOR
+                        color for numbers
 ```
 
 
