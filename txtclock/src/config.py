@@ -48,6 +48,8 @@ class Config:
         "numnum": src.fonts.get("numnum")(),
         "bcd": src.fonts.get("bcd")("·", "■"),
         "easybcd": src.fonts.get("easybcd")("·", "■"),
+        "bars": src.fonts.get("bars")("·", "■"),
+        "easybars": src.fonts.get("easybars")("·", "■"),
         "bigblocks1": src.fonts.get("bigblocks")("·"),
         "bigblocks2": src.fonts.get("bigblocks")("#"),
         "bigblocks3": src.fonts.get("bigblocks")("*"),
