@@ -71,8 +71,6 @@ class Config:
 
 
     def __init__(self):
-        self._last_color_id = 0
-
         from .args import Args
         args = Args.read()
 
@@ -106,30 +104,53 @@ class Config:
                             setattr(self, prop, parser[Config.appname][prop])
 
 
-    def get_next_color(self, color):
+    def get_next_color(self, colorstr, change='fg'):
         color_keys = list(Config.colors.keys())
+        (fg, bg) = self._get_colors(colorstr)
+        color = fg if change == 'fg' else bg
+
         if color in color_keys:
             current_index = color_keys.index(color) + 1
         else:
             current_index = 0
+
         if current_index >= len(color_keys):
             current_index = 0
-        if color_keys[current_index] == 'black':    # Skip black
+
+        if change == 'bg' and Config.colors[color_keys[current_index]] & curses.A_BOLD:
             current_index += 1
-        return color_keys[current_index]
+
+        if current_index >= len(color_keys):
+            current_index = 0
+
+        if change == 'fg':
+            return f"{color_keys[current_index]}, {bg}"
+        else:
+            return f"{fg}, {color_keys[current_index]}"
 
 
-    def get_prev_color(self, color):
+    def get_prev_color(self, colorstr, change='fg'):
         color_keys = list(Config.colors.keys())
+        (fg, bg) = self._get_colors(colorstr)
+        color = fg if change == 'fg' else bg
+
         if color in color_keys:
             current_index = color_keys.index(color) - 1
         else:
             current_index = 0
         if current_index < 0:
             current_index = len(color_keys)-1
-        if color_keys[current_index] == 'black':    # Skip black
+
+        if change == 'bg' and Config.colors[color_keys[current_index]] & curses.A_BOLD:
             current_index -= 1
-        return color_keys[current_index]
+
+        if current_index < 0:
+            current_index = len(color_keys)-1
+
+        if change == 'fg':
+            return f"{color_keys[current_index]}, {bg}"
+        else:
+            return f"{fg}, {color_keys[current_index]}"
 
 
     def get_next_font(self, font):
@@ -158,11 +179,15 @@ class Config:
                 setattr(self, f"{prop}_curses", self._create_color(value))
 
 
-    def _create_color(self, colorstr):
+    def _get_colors(self, colorstr):
         parts = colorstr.replace(" ","").split(",")
         fg = parts[0]
         bg = parts[1] if len(parts)>1 else "black"
-        self._last_color_id += 1
+        return (fg, bg)
+
+
+    def _create_color(self, colorstr):
+        (fg, bg) = self._get_colors(colorstr)
         _fg = self.colors[fg]
         _bg = self.colors[bg]
 
@@ -172,10 +197,8 @@ class Config:
             _fg &= ~curses.A_BOLD
             _bg &= ~curses.A_BOLD
 
-        curses.init_pair(self._last_color_id, _fg, _bg)
-        color_id = self._last_color_id
-
-        color = curses.color_pair(color_id)
+        curses.init_pair(1, _fg, _bg)
+        color = curses.color_pair(1)
         if _bold:
             color |= curses.A_BOLD
 

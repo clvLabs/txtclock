@@ -8,7 +8,7 @@ from src.timer import Timer
 
 class Clock:
 
-    HELP_STR = "[h]elp [b]ar [cC]olor [d]ate [fF]ont [tT]imer [q]uit"
+    HELP_STR = "[h]elp [s]econdsBar [cC]olor [bB]ackground [d]ate [fF]ont [tT]imer [q]uit"
 
     def __init__(self, config):
         self.config = config
@@ -46,6 +46,11 @@ class Clock:
 
     def _main_loop(self):
         last_second = None
+        if self.config.utc:
+            self.timestamp = datetime.datetime.utcnow()
+        else:
+            self.timestamp = datetime.datetime.now()
+        self._redraw(force_clear=True)
 
         while not self.exit:
             if self.config.utc:
@@ -81,6 +86,7 @@ class Clock:
     def _redraw(self, force_clear=False):
         if force_clear:
             self.win.clear()
+            self.win.bkgd(' ', self.config.numbers_color_curses)
         self.face.draw(self.timestamp)
 
         if self.config.show_help:
@@ -188,17 +194,27 @@ class Clock:
         if ch in 'Qq':
             self.exit = True
 
-        if ch in 'Bb':
+        if ch in 'Ss':
             self.config.show_seconds_bar = not self.config.show_seconds_bar
             self._redraw(force_clear=True)
 
         if ch in 'c':
-            self.config.numbers_color = self.config.get_next_color(self.config.numbers_color)
+            self.config.numbers_color = self.config.get_next_color(self.config.numbers_color, "fg")
             self.config.create_colors()
             self._redraw(force_clear=True)
 
         if ch in 'C':
-            self.config.numbers_color = self.config.get_prev_color(self.config.numbers_color)
+            self.config.numbers_color = self.config.get_prev_color(self.config.numbers_color, "fg")
+            self.config.create_colors()
+            self._redraw(force_clear=True)
+
+        if ch in 'b':
+            self.config.numbers_color = self.config.get_next_color(self.config.numbers_color, "bg")
+            self.config.create_colors()
+            self._redraw(force_clear=True)
+
+        if ch in 'B':
+            self.config.numbers_color = self.config.get_prev_color(self.config.numbers_color, "bg")
             self.config.create_colors()
             self._redraw(force_clear=True)
 
