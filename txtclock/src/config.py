@@ -34,13 +34,21 @@ class Config:
 
     colors = {
         "blue": curses.COLOR_BLUE,
+        "blue+": curses.COLOR_BLUE | curses.A_BOLD,
         "black": curses.COLOR_BLACK,
+        # "black+": curses.COLOR_BLACK | curses.A_BOLD,
         "cyan": curses.COLOR_CYAN,
+        "cyan+": curses.COLOR_CYAN | curses.A_BOLD,
         "green": curses.COLOR_GREEN,
+        "green+": curses.COLOR_GREEN | curses.A_BOLD,
         "magenta": curses.COLOR_MAGENTA,
+        "magenta+": curses.COLOR_MAGENTA | curses.A_BOLD,
         "red": curses.COLOR_RED,
+        "red+": curses.COLOR_RED | curses.A_BOLD,
         "white": curses.COLOR_WHITE,
+        "white+": curses.COLOR_WHITE | curses.A_BOLD,
         "yellow": curses.COLOR_YELLOW,
+        "yellow+": curses.COLOR_YELLOW | curses.A_BOLD,
     }
 
     fonts = {
@@ -155,9 +163,23 @@ class Config:
         fg = parts[0]
         bg = parts[1] if len(parts)>1 else "black"
         self._last_color_id += 1
-        curses.init_pair(self._last_color_id, self.colors[fg], self.colors[bg])
+        _fg = self.colors[fg]
+        _bg = self.colors[bg]
+
+        _bold = False
+        if _fg & curses.A_BOLD or _bg & curses.A_BOLD:
+            _bold = True
+            _fg &= ~curses.A_BOLD
+            _bg &= ~curses.A_BOLD
+
+        curses.init_pair(self._last_color_id, _fg, _bg)
         color_id = self._last_color_id
-        return curses.color_pair(color_id)
+
+        color = curses.color_pair(color_id)
+        if _bold:
+            color |= curses.A_BOLD
+
+        return color
 
 
     def __str__(self) -> str:
