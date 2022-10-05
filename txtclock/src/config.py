@@ -33,22 +33,22 @@ class Config:
     ]
 
     colors = {
-        "blue": curses.COLOR_BLUE,
-        "blue+": curses.COLOR_BLUE | curses.A_BOLD,
         "black": curses.COLOR_BLACK,
-        # "black+": curses.COLOR_BLACK | curses.A_BOLD,
-        "cyan": curses.COLOR_CYAN,
-        "cyan+": curses.COLOR_CYAN | curses.A_BOLD,
-        "green": curses.COLOR_GREEN,
-        "green+": curses.COLOR_GREEN | curses.A_BOLD,
-        "magenta": curses.COLOR_MAGENTA,
-        "magenta+": curses.COLOR_MAGENTA | curses.A_BOLD,
-        "red": curses.COLOR_RED,
-        "red+": curses.COLOR_RED | curses.A_BOLD,
+        "black+": curses.COLOR_BLACK | curses.A_BOLD,
         "white": curses.COLOR_WHITE,
         "white+": curses.COLOR_WHITE | curses.A_BOLD,
         "yellow": curses.COLOR_YELLOW,
         "yellow+": curses.COLOR_YELLOW | curses.A_BOLD,
+        "green": curses.COLOR_GREEN,
+        "green+": curses.COLOR_GREEN | curses.A_BOLD,
+        "blue": curses.COLOR_BLUE,
+        "blue+": curses.COLOR_BLUE | curses.A_BOLD,
+        "cyan": curses.COLOR_CYAN,
+        "cyan+": curses.COLOR_CYAN | curses.A_BOLD,
+        "magenta": curses.COLOR_MAGENTA,
+        "magenta+": curses.COLOR_MAGENTA | curses.A_BOLD,
+        "red": curses.COLOR_RED,
+        "red+": curses.COLOR_RED | curses.A_BOLD,
     }
 
     fonts = {
