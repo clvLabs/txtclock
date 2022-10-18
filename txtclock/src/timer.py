@@ -40,6 +40,10 @@ class Timer:
         hours = 0
         minutes = 0
 
+        if seconds < 0:
+            _str += "-"
+            seconds *= -1
+
         if seconds > 3600:
             hours = seconds // 3600
             seconds -= hours * 3600

@@ -3,9 +3,10 @@ import datetime
 
 class Face:
 
-    def __init__(self, win, config) -> None:
-        self.win = win
-        self.config = config
+    def __init__(self, clock) -> None:
+        self.clock = clock
+        self.win = clock.win
+        self.config = clock.config
 
 
     def draw(self, timestamp):
@@ -41,16 +42,16 @@ class Face:
             y += 1
 
 
-        '''
         if True:
-            txt = ""
-            # for t in self.timers
-                txt += " T|"
-                txt += timestamp.strftime(self.config.date_format)
+            if self.clock.timers:
+                txt = ""
+                for t in sorted(self.clock.timers, key=lambda t: t.remaining, reverse=True):
+                    txt += f"[{t.msg}:{t.remaining_str}] "
+            else:
+                txt = " " * curses.COLS
             y += 1
             strlist.append([y, txt])
             y += 1  # Force extra separation line
-        '''
 
 
         if self.config.show_date:
@@ -82,13 +83,14 @@ class Face:
             txt = line[1]
 
             if len(txt) > curses.COLS:
-                x = 0
                 txt = txt[:curses.COLS]
             else:
-                x = (curses.COLS - len(txt)) // 2
+                _gap = (curses.COLS - len(txt)) // 2
+                _fill = " " * _gap
+                txt = f"{_fill}{txt}{_fill}"
 
             if txt:
-                self.win.addstr(start_line+offset, x, txt, self.config.numbers_color_curses)
+                self.win.addstr(start_line+offset, 0, txt, self.config.numbers_color_curses)
 
 
     def _draw_str(self, timestamp):

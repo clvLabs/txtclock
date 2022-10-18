@@ -32,7 +32,7 @@ class Clock:
         self.win = win
         self._init_curses()
         self.config.create_colors()
-        self.face = Face(self.win, self.config)
+        self.face = Face(self)
         self._main_loop()
 
 
