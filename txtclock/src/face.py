@@ -90,7 +90,7 @@ class Face:
                 txt = f"{_fill}{txt}{_fill}"
 
             if txt:
-                self.win.addstr(start_line+offset, 0, txt, self.config.numbers_color_curses)
+                self._addstr(start_line+offset, 0, txt, self.config.numbers_color_curses)
 
 
     def _draw_str(self, timestamp):
@@ -134,4 +134,12 @@ class Face:
                 x = (curses.COLS - len(txt)) // 2
 
             if txt:
-                self.win.addstr(start_line+offset, x, txt, self.config.numbers_color_curses)
+                self._addstr(start_line+offset, x, txt, self.config.numbers_color_curses)
+
+
+    def _addstr(self, *args, **kwargs):
+        try:
+            return self.win.addstr(*args, **kwargs)
+        except Exception:
+            # If curses can't show this piece of text, we'll just ignore it
+            pass
