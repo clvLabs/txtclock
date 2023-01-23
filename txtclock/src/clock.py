@@ -80,7 +80,10 @@ class Clock:
 
     def _show_notification(self, msg):
         msg = f"[txtclock]\n{msg}"
-        subprocess.Popen(["notify-send", "-u", "Critical", f"{msg}"])
+        try:
+            subprocess.Popen(["notify-send", "-u", "Critical", f"{msg}"])
+        except Exception:
+            pass
 
 
     def _redraw(self, force_clear=False):
