@@ -12,6 +12,7 @@ class Config:
 
     _defaults = {
         "utc":                   { "value": False,           "help": "use UTC instead of local time?" },
+        "offset":                { "value": 0,               "help": "hour offset",           "shorthand": "o" },
         "font":                  { "value": "numnum",        "help": "select clock font",     "shorthand": "f" },
         "show_date":             { "value": False,           "help": "show date?",            "shorthand": "d" },
         "show_seconds_bar":      { "value": False,           "help": "show seconds bar?",     "shorthand": "b" },

@@ -50,6 +50,7 @@ class Clock:
             self.timestamp = datetime.datetime.utcnow()
         else:
             self.timestamp = datetime.datetime.now()
+        self.timestamp += datetime.timedelta(hours=self.config.offset)
         self._redraw(force_clear=True)
 
         while not self.exit:
@@ -57,6 +58,7 @@ class Clock:
                 self.timestamp = datetime.datetime.utcnow()
             else:
                 self.timestamp = datetime.datetime.now()
+            self.timestamp += datetime.timedelta(hours=self.config.offset)
 
             if self.timestamp.second != last_second:
                 self._redraw()
