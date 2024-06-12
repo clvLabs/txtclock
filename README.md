@@ -32,12 +32,14 @@ Use the following keys while running:
 |key|function|
 |---|---|
 |`ESC` / `CTRL+C` / `q`|exit|
+|`e`|Start/delete elapsed timer|
 |`s`|Show/hide the seconds bar|
 |`c`|Cycle through colors (forward)|
 |`C`|Cycle through colors (backwards)|
 |`b`|Cycle through background colors (forward)|
 |`B`|Cycle through background colors (backwards)|
 |`d`|Show/hide the date|
+|`t`|Set timer|
 |`f`|Cycle through fonts (forward)|
 |`F`|Cycle through fonts (backwards)|
 |`h`|Show/hide the help bar|

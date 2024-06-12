@@ -8,11 +8,12 @@ from src.timer import Timer
 
 class Clock:
 
-    HELP_STR = "[h]elp [s]econdsBar [cC]olor [bB]ackground [d]ate [fF]ont [tT]imer [q]uit"
+    HELP_STR = "[h]elp [s]econdsBar [cC]olor [bB]ackground [d]ate [fF]ont [tT]imer [eE]lapsed [q]uit"
 
     def __init__(self, config):
         self.config = config
         self.timestamp = None
+        self.elapsed_timer_active = False
         self.ignore_next_resize = False
         self.exit = False
         self.timers = []
@@ -64,9 +65,9 @@ class Clock:
                 self._redraw()
                 last_second = self.timestamp.second
 
-            if any([t.elapsed for t in self.timers]):
+            if any([t.finished for t in self.timers]):
                 for t in self.timers:
-                    if t.elapsed:
+                    if t.finished:
                         time_str = time.strftime("%H:%M:%S", time.localtime(t.start_time))
                         msg = f"{t.duration_str} timer started at {time_str} FINISHED"
                         if t.msg:
@@ -74,7 +75,7 @@ class Clock:
 
                         self._show_notification(msg)
 
-                self.timers = [t for t in self.timers if not t.elapsed]
+                self.timers = [t for t in self.timers if not t.finished]
 
             self._process_user_input()
             time.sleep(0.1)
@@ -176,6 +177,14 @@ class Clock:
         self.timers.append(Timer(seconds, msg))
 
 
+    def _toggle_elapsed_timer(self):
+        if self.elapsed_timer_active:
+            self.timers = [t for t in self.timers if not t.elapsed_timer_mode]
+        self.elapsed_timer_active = not self.elapsed_timer_active
+        if self.elapsed_timer_active:
+            self.timers.append(Timer(0, "elapsed"))
+
+
     def _process_user_input(self):
         key = self.win.getch()
 
@@ -242,3 +251,6 @@ class Clock:
         if ch in 'Tt':
             self.config.show_help = False
             self._set_timer()
+
+        if ch in 'Ee':
+            self._toggle_elapsed_timer()

@@ -46,7 +46,10 @@ class Face:
             if self.clock.timers:
                 txt = ""
                 for t in sorted(self.clock.timers, key=lambda t: t.remaining, reverse=True):
-                    txt += f"[{t.msg}:{t.remaining_str}] "
+                    if t.elapsed_timer_mode:
+                        txt += f"[{t.msg}:{t.elapsed_str}] "
+                    else:
+                        txt += f"[{t.msg}:{t.remaining_str}] "
             else:
                 txt = " " * curses.COLS
             y += 1
